@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: psyche-sense-backend
+    runtime: docker
+    region: oregon
+    plan: free
+    rootDir: backend
+    dockerfilePath: Dockerfile
+    ports:
+      - port: 8000
+    healthCheckPath: /
+    healthCheckInterval: 30
+    envVars:
+      - key: ALLOWED_ORIGINS
+        scope: run
+        sync: false
