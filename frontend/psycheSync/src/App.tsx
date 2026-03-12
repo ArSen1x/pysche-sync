@@ -126,7 +126,7 @@ export default function App() {
           <TabsContent value="search">
             {loading && (
               <div className="flex justify-center py-16">
-                <Loader size={48} />
+                <Loader />
               </div>
             )}
             {!loading && searched && results.length === 0 && (

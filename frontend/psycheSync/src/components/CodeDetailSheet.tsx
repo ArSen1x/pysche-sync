@@ -94,7 +94,7 @@ export default function CodeDetailSheet({
           {/* Loading */}
           {isLoading && (
             <div className="flex flex-col items-center justify-center flex-1 gap-3 py-16">
-              <Loader size={48} />
+              <Loader />
               <p className="text-sm text-slate-400 dark:text-slate-500">Loading details…</p>
             </div>
           )}
