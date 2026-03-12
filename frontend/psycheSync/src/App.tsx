@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from "react"
-import { Search, BookmarkCheck, X, Loader2 } from "lucide-react"
+import { Search, BookmarkCheck, X, Loader2, Sun, Moon } from "lucide-react"
 import { Toaster } from "sonner"
+import { useTheme } from "./components/theme-provider"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import SearchCard from "./components/SearchCard"
 import CodeDetailSheet from "./components/CodeDetailSheet"
@@ -19,6 +20,7 @@ export default function App() {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const { favorites, toggleFavorite, isFavorited } = useFavorites()
+  const { theme, setTheme } = useTheme()
 
   const fetchResults = useCallback(async (q: string) => {
     if (!q.trim()) { setResults([]); setSearched(false); return }
@@ -45,24 +47,33 @@ export default function App() {
   const clearQuery = () => { setQuery(""); setResults([]); setSearched(false) }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col transition-colors">
       <Toaster position="top-center" richColors />
 
       <Tabs defaultValue="search" className="flex flex-col flex-1">
 
         {/* ── Sticky Header ── */}
-        <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-slate-100 px-4 pt-10 pb-3">
-          <p className="text-xs font-semibold tracking-widest text-sage-500 uppercase mb-3 text-center">
-            PsycheSync
-          </p>
+        <header className="sticky top-0 z-20 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-4 pt-10 pb-3">
+          <div className="relative flex items-center justify-center mb-3">
+            <p className="text-xs font-semibold tracking-widest text-sage-500 uppercase">
+              PsycheSync
+            </p>
+            <button
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="absolute right-0 p-1.5 rounded-lg text-slate-400 hover:text-sage-600 dark:text-slate-500 dark:hover:text-sage-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors [-webkit-tap-highlight-color:transparent]"
+              aria-label="Toggle dark mode"
+            >
+              {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
+            </button>
+          </div>
 
           {/* shadcn Tabs trigger row */}
-          <TabsList className="w-full max-w-lg mx-auto grid grid-cols-2 bg-slate-100 rounded-xl h-9 mb-3">
-            <TabsTrigger value="search" className="rounded-lg text-xs font-medium text-slate-500 hover:!text-sage-600 data-[state=active]:bg-white data-[state=active]:!text-sage-700 data-[state=active]:shadow-sm">
+          <TabsList className="w-full max-w-lg mx-auto grid grid-cols-2 bg-slate-100 dark:bg-slate-800 rounded-xl h-9 mb-3">
+            <TabsTrigger value="search" className="rounded-lg text-xs font-medium text-slate-500 dark:text-slate-400 hover:!text-sage-600 dark:hover:!text-sage-400 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:!text-sage-700 dark:data-[state=active]:!text-sage-300 data-[state=active]:shadow-sm">
               <Search size={13} className="mr-1.5" />
               Search
             </TabsTrigger>
-            <TabsTrigger value="favorites" className="rounded-lg text-xs font-medium text-slate-500 hover:!text-sage-600 data-[state=active]:bg-white data-[state=active]:!text-sage-700 data-[state=active]:shadow-sm relative">
+            <TabsTrigger value="favorites" className="rounded-lg text-xs font-medium text-slate-500 dark:text-slate-400 hover:!text-sage-600 dark:hover:!text-sage-400 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:!text-sage-700 dark:data-[state=active]:!text-sage-300 data-[state=active]:shadow-sm relative">
               <BookmarkCheck size={13} className="mr-1.5" />
               Favorites
               {favorites.length > 0 && (
@@ -76,17 +87,17 @@ export default function App() {
           {/* Search input — only visible on search tab */}
           <TabsContent value="search" className="mt-0">
             <div className="relative max-w-lg mx-auto">
-              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 pointer-events-none" />
               <input
                 type="text"
                 value={query}
                 onChange={handleQueryChange}
                 placeholder="Search ICD-10 codes or descriptions…"
-                className="w-full bg-slate-100 rounded-xl pl-9 pr-10 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-sage-300 transition"
+                className="w-full bg-slate-100 dark:bg-slate-800 rounded-xl pl-9 pr-10 py-2.5 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-sage-300 dark:focus:ring-sage-600 transition"
                 autoFocus
               />
               {query && (
-                <button onClick={clearQuery} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors [-webkit-tap-highlight-color:transparent]">
+                <button onClick={clearQuery} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors [-webkit-tap-highlight-color:transparent]">
                   <X size={14} />
                 </button>
               )}
@@ -94,7 +105,7 @@ export default function App() {
           </TabsContent>
 
           <TabsContent value="favorites" className="mt-0">
-            <p className="text-center text-slate-500 text-xs">Your saved diagnostic codes</p>
+            <p className="text-center text-slate-500 dark:text-slate-400 text-xs">Your saved diagnostic codes</p>
           </TabsContent>
         </header>
 
@@ -109,13 +120,13 @@ export default function App() {
               </div>
             )}
             {!loading && searched && results.length === 0 && (
-              <div className="text-center py-16 text-slate-400">
+              <div className="text-center py-16 text-slate-400 dark:text-slate-500">
                 <Search size={32} className="mx-auto mb-3 opacity-40" />
-                <p className="text-sm">No results for <span className="font-medium text-slate-600">"{query}"</span></p>
+                <p className="text-sm">No results for <span className="font-medium text-slate-600 dark:text-slate-300">"{query}"</span></p>
               </div>
             )}
             {!loading && !searched && (
-              <div className="text-center py-20 text-slate-300">
+              <div className="text-center py-20 text-slate-300 dark:text-slate-600">
                 <Search size={40} className="mx-auto mb-3 opacity-30" />
                 <p className="text-sm">Start typing to search</p>
               </div>
@@ -140,10 +151,10 @@ export default function App() {
           {/* Favorites tab content */}
           <TabsContent value="favorites">
             {favorites.length === 0 ? (
-              <div className="text-center py-16 text-slate-400">
+              <div className="text-center py-16 text-slate-400 dark:text-slate-500">
                 <BookmarkCheck size={32} className="mx-auto mb-3 opacity-40" />
                 <p className="text-sm">No saved codes yet.</p>
-                <p className="text-xs text-slate-300 mt-1">Star a code in the detail view to save it.</p>
+                <p className="text-xs text-slate-300 dark:text-slate-600 mt-1">Star a code in the detail view to save it.</p>
               </div>
             ) : (
               <ul className="space-y-2.5">
