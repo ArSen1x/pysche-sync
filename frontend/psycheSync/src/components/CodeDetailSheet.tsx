@@ -1,5 +1,6 @@
 import { useState } from "react"
-import { Copy, Check, Loader2, AlertCircle, ChevronRight, X, Star } from "lucide-react"
+import { Copy, Check, AlertCircle, ChevronRight, X, Star } from "lucide-react"
+import Loader from "@/components/Loader"
 import { Dialog } from "radix-ui"
 import { toast } from "sonner"
 import { useCodeDetails } from "@/hooks/useCodeDetails"
@@ -92,8 +93,8 @@ export default function CodeDetailSheet({
 
           {/* Loading */}
           {isLoading && (
-            <div className="flex flex-col items-center justify-center flex-1 gap-3 py-16 text-sage-400">
-              <Loader2 size={28} className="animate-spin" />
+            <div className="flex flex-col items-center justify-center flex-1 gap-3 py-16">
+              <Loader size={48} />
               <p className="text-sm text-slate-400 dark:text-slate-500">Loading details…</p>
             </div>
           )}

@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from "react"
-import { Search, BookmarkCheck, X, Loader2, Sun, Moon, Info } from "lucide-react"
+import { Search, BookmarkCheck, X, Sun, Moon, Info } from "lucide-react"
+import Loader from "./components/Loader"
 import { Toaster } from "sonner"
 import { useTheme } from "./components/theme-provider"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
@@ -124,8 +125,8 @@ export default function App() {
           {/* Search tab content */}
           <TabsContent value="search">
             {loading && (
-              <div className="flex justify-center py-16 text-sage-400">
-                <Loader2 size={24} className="animate-spin" />
+              <div className="flex justify-center py-16">
+                <Loader size={48} />
               </div>
             )}
             {!loading && searched && results.length === 0 && (
